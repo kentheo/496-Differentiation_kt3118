@@ -8,31 +8,38 @@ This file should been in the root of the repository
 
 """
 
-############################# q1a     
-def postD(nTotal, nWhite):
-    pass
+# NB this is tested on python 2.7. Watch out for integer division
 
-
-############################# q1b      
-def evidenceC(nTotal, nWhite):
-    pass
-
+import numpy as np
     
-############################# q2c     
 def grad_f1(x):
+    """
+    4 marks
+
+    :param x: input array with shape (2, )
+    :return: the gradient of f1, with shape (2, )
+    """
     pass
 
 def grad_f2(x):
+    """
+    6 marks
+
+    :param x: input array with shape (2, )
+    :return: the gradient of f2, with shape (2, )
+    """
     pass
 
 def grad_f3(x):
+    """
+    This question is optional. The test will still run (so you can see if you are correct by
+    looking at the testResults.txt file), but the marks are for grad_f1 and grad_f2 only.
+
+    Do not delete this function.
+
+    :param x: input array with shape (2, )
+    :return: the gradient of f3, with shape (2, )
+    """
     pass
 
-
-############################# q6a
-def lml(alpha, beta, Phi, Y):
-    pass
-
-def grad_lml(alpha, beta, Phi, Y):
-    pass
 
