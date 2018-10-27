@@ -65,20 +65,6 @@ def grad_f3(x):
     
     x_T = np.array([x]).T
 
-    grad = np.exp(exp_1)*(2 * x.T) + np.exp(exp_2)*(2 * np.dot(x.T, B)) + (((2/1000) * x.T) / np.linalg.det(1/100.0* np.identity(2) + (x* x_T)))
+    grad = np.exp(-exp_1)*(2 * x.T) + np.exp(-exp_2)*(2 * np.dot(x.T, B)) + (((2/1000) * x.T) / np.linalg.det(1/100.0* np.identity(2) + (x* x_T)))
     
     return grad
-
-# Gradient Descent Algorithm for f2, f3
-def gradient_descent(step_size, gradient):
-    x_i = np.array([1,-1])
-    max_iterations = 50
-    iteration = 0
-
-    while iteration < max_iterations:
-        if gradient == "f2":
-            x_i = x_i - step_size * grad_f2(x_i).T
-        else:
-            x_i = x_i - step_size * grad_f3(x_i).T
-        iteration += 1
-        print('Iteration ', iteration, 'x_i = ', x_i)
