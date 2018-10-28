@@ -65,6 +65,10 @@ def grad_f3(x):
     
     x_T = np.array([x]).T
 
-    grad = np.exp(-exp_1)*(2 * x.T) + np.exp(-exp_2)*(2 * np.dot(x.T, B)) + (((2/1000) * x.T) / np.linalg.det(1/100.0* np.identity(2) + (x* x_T)))
+    id_x = 1/100.0* np.identity(2) + (x* x_T)
+    
+    determinant = np.linalg.det(id_x)
+    
+    grad = np.exp(-exp_1)*(2 * x.T) + np.exp(-exp_2)*(2 * np.dot(x.T, B)) + (((2/1000) * x.T) / determinant)
     
     return grad
