@@ -6,17 +6,21 @@ X_train = np.reshape(np.linspace(0, 0.9, N), (N, 1))
 Y_train = np.cos(10*X_train**2) + 0.1 * np.sin(100*X_train)
 
 # Polynomial Design matrix of size N x (K+1)
-def polynomial_design_matrix(K, x):
-    phi = np.zeros((len(x), K+1))
-    for j in range(K+1):
-        for i in range(len(x)):
-            phi[i][j] = x[i]**j
-    # print("phi shape = {0}".format(phi.shape))
+def trigonometric_design_matrix(K, x):
+    phi = np.zeros((len(x), (2*K)+1))
+    print("phi shape = {0}".format(phi.shape))
+    for i in range(len(x)):
+        phi[i][0] = 1.0
+        for j in range(1, K+1):
+            print("j = {0}, i = {1}".format((2*j)-1, i))
+            phi[i][(2*j)-1] = np.sin(2*np.pi*j*x[i])
+            phi[i][2*j] = np.cos(2*np.pi*j*x[i])
+    print(phi)
     return phi
 
 # Estimate weights MLE
 def weights_MLE(K, X, Y):
-    phi_k = polynomial_design_matrix(K, X)
+    phi_k = trigonometric_design_matrix(K, X)
     try:
         inverse = np.linalg.inv(np.dot(phi_k.T, phi_k))
     except np.linalg.LinAlgError:
@@ -47,40 +51,49 @@ def gaussian_noise(mu, sigma, N):
     # print(noise.shape)
     return noise
 
-def linear_regression(K, X_train, Y_train, X_test):
-    phi_train = polynomial_design_matrix(K, X_train)
+def linear_regression_trigonometric(K, X_train, Y_train, X_test):
+    phi_train = trigonometric_design_matrix(K, X_train)
     w = weights_MLE(K, X_train, Y_train)
     print("w shape = {0}".format(w.shape))
     sigma = sigma_MLE(w, phi_train, Y_train, X_train)
     print("sigma shape = {0}".format(sigma.shape))
 
     print("----------------- TEST DATA {0} -------------------".format(K))
-    phi_test = polynomial_design_matrix(K, X_test)
+    phi_test = trigonometric_design_matrix(K, X_test)
 
-    mu = np.dot(phi_test, w)
+    # This bit here is not necessary. DO NOT USE NOISE when finding the new Y
+    # mu = np.dot(phi_test, w)
+    # noise = gaussian_noise(mu, sigma, len(X_test))
     parametered_x = np.dot(phi_test, w)
-    noise = gaussian_noise(mu, sigma, len(X_test))
-
-    print("parametered_x shape = {0}".format(parametered_x.shape))
-    print("noise shape = {0}".format(noise.shape))
-    Y_test = parametered_x #+ noise
+    Y_test = parametered_x
     print("------------------------------------------------")
     return Y_test
 
+
+# PLOTS
 fig = plt.figure(figsize=plt.figaspect(0.5))
 
 N_test = 200
-X_test = np.reshape(np.linspace(-0.3, 1.3, N_test), (N_test, 1))
+X_test = np.reshape(np.linspace(-1.0, 1.2, N_test), (N_test, 1))
 
-# Linear regrssion for each polynomial value
-K_0 = linear_regression(0, X_train, Y_train, X_test)
-K_1 = linear_regression(1, X_train, Y_train, X_test)
-K_2 = linear_regression(2, X_train, Y_train, X_test)
-K_3 = linear_regression(3, X_train, Y_train, X_test)
-K_11 = linear_regression(11, X_train, Y_train, X_test)
+K_list = []
+for i in range(11):
+    K_list.append(linear_regression_trigonometric(i, X_train, Y_train, X_test))
 
-plt.plot(X_train, Y_train, 'ko', X_test, K_0, 'b-', X_test, K_1, 'g-', X_test, K_2, 'r-', X_test, K_3, 'm-', X_test, K_11, 'y-')
+
+
+colours = ['c-', 'g-', 'y-', 'r-', 'b-', 'm-']
+legend = []
+print(len(K_list))
+print(len(colours))
+for i in range(len(K_list)):
+    plt.plot(X_test, K_list[i], colours[i])
+    legend.append("K = " + str(i))
+
+plt.legend(legend, loc='lower left')
+plt.xlabel("X")
+plt.ylabel("Y")
 axes = plt.gca()
-axes.set_xlim([-0.3,1.3])
-axes.set_ylim([-1.4,3.6])
+axes.set_xlim([-1.0,1.2])
+axes.set_ylim([-1.3, 1.6])
 plt.show()
