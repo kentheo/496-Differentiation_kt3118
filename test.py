@@ -1,11 +1,14 @@
 import numpy as np
 
 N = 25
-X_train = np.reshape(np.linspace(0, 0.9, N), (N, 1))
+X_train = np.reshape(np.linspace(0, 1.0, N), (N, 1))
 
-x = np.reshape(np.append(X_train[0:24], X_train[25:]), (N-1, 1))
-print(x[0])
-print(x.shape)
+# x = np.reshape(np.append(X_train[0:24], X_train[25:]), (N-1, 1))
+print(X_train)
+print(X_train.shape)
+
+def get_means(x):
+    
 
 
 # colours = ['c-', 'g-', 'y-', 'r-', 'b-', 'm-']
