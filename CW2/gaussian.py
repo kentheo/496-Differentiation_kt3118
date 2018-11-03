@@ -7,13 +7,13 @@ Y_train = np.cos(10*X_train**2) + 0.1 * np.sin(100*X_train)
 
 # Gaussian Design matrix of size N x (K+1)
 def gaussian_design_matrix(K, x, l):
-    phi = np.ones((len(x), K+1))
+    phi = np.zeros((len(x), K+1))
     # Get means of m_i
-    means = np.reshape(np.linspace(0, 1.0, K), (K, 1))
+    means = np.reshape(np.linspace(0, 1.0, K+1), (K+1, 1))
     for i in range(len(x)):
         phi[i][0] = 1.0
         for j in range(1, K+1):
-            term = (x[i] - means[j-1])**2
+            term = (x[i] - means[j])**2
             term /= (2*l)**2
             phi[i][j] = np.exp(-term)
     print("phi shape = {0}".format(phi.shape))
@@ -27,7 +27,7 @@ def weights_MAP(K, X, Y, l, phi_k, lamda):
     # sigma = (2*l)**2
     term = (l / b_squared) * np.identity(len(phi_k_T_phi))
     try:
-        inverse = np.linalg.inv(term)
+        inverse = np.linalg.inv(phi_k_T_phi + term)
     except np.linalg.LinAlgError:
         print("ERROR!! Matrix not invertible")
         pass
@@ -55,19 +55,44 @@ def linear_regression_gaussian(K, X_train, Y_train, X_test, lamda):
     print("------------------------------------------------")
     return Y_test
 
-fig = plt.figure(figsize=plt.figaspect(0.5))
+fig = plt.figure(1,figsize=(11,9))
 
 N_test = 200
 X_test = np.reshape(np.linspace(-0.3, 1.3, N_test), (N_test, 1))
 
 # Linear regrssion for each polynomial value
-K_20 = linear_regression_gaussian(20, X_train, Y_train, X_test, 200.0)
+K_20 = linear_regression_gaussian(20, X_train, Y_train, X_test, 0.1)
 
 plt.plot(X_train, Y_train, 'ko', X_test, K_20, 'b-')
 plt.legend(["Original", "K = 20"], loc='lower left')
 plt.xlabel("X")
 plt.ylabel("Y")
 axes = plt.gca()
-# axes.set_xlim([-0.3,1.3])
+axes.set_xlim([-0.3,1.3])
 # axes.set_ylim([-1.4,3.6])
-plt.show()
+fig.show()
+
+fig2 = plt.figure(2,figsize=(11,9))
+K_20_2 = linear_regression_gaussian(20, X_train, Y_train, X_test, 20.0)
+
+plt.plot(X_train, Y_train, 'ko', X_test, K_20_2, 'b-')
+plt.legend(["Original", "K = 20"], loc='lower left')
+plt.xlabel("X")
+plt.ylabel("Y")
+axes = plt.gca()
+axes.set_xlim([-0.3,1.3])
+# axes.set_ylim([-1.4,3.6])
+fig2.show()
+
+fig3 = plt.figure(3,figsize=(11,9))
+K_20_3 = linear_regression_gaussian(20, X_train, Y_train, X_test, 0.001)
+
+plt.plot(X_train, Y_train, 'ko', X_test, K_20_3, 'b-')
+plt.legend(["Original", "K = 20"], loc='lower left')
+plt.xlabel("X")
+plt.ylabel("Y")
+axes = plt.gca()
+axes.set_xlim([-0.3,1.3])
+# axes.set_ylim([-1.4,3.6])
+fig3.show()
+raw_input()

@@ -68,7 +68,7 @@ def linear_regression_polynomial(K, X_train, Y_train, X_test):
     print("------------------------------------------------")
     return Y_test
 
-fig = plt.figure(figsize=plt.figaspect(0.5))
+fig = plt.figure(figsize=(11,9))
 
 N_test = 200
 X_test = np.reshape(np.linspace(-0.3, 1.3, N_test), (N_test, 1))

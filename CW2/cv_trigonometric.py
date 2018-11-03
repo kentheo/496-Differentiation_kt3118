@@ -92,7 +92,7 @@ def linear_regression_trigonometric_CV(K, X_train, Y_train):
 
 
 # PLOTS
-fig = plt.figure(figsize=plt.figaspect(0.5))
+fig = plt.figure(figsize=(11,9))
 
 N_test = 200
 X_test = np.reshape(np.linspace(-1.0, 1.2, N_test), (N_test, 1))
