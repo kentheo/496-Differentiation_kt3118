@@ -60,7 +60,7 @@ fig = plt.figure(1,figsize=(11,9))
 N_test = 200
 X_test = np.reshape(np.linspace(-0.3, 1.3, N_test), (N_test, 1))
 
-# Linear regrssion for each polynomial value
+# Linear regrssion for each gaussian value
 K_20 = linear_regression_gaussian(20, X_train, Y_train, X_test, 0.1)
 
 plt.plot(X_train, Y_train, 'ko', X_test, K_20, 'b-')
